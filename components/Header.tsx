@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NavLinks from './NavLinks';
 
 export default function Header() {
   return (
@@ -7,13 +8,7 @@ export default function Header() {
         <Link href="/" aria-label="Adonai Villalobos - Home" className="text-2xl font-bold">
           Adonai Villalobos
         </Link>
-        <nav>
-          <ul className="flex gap-6">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/projects">Projects</Link></li>
-            <li><Link href="/about">About</Link></li>
-          </ul>
-        </nav>
+        <NavLinks />
       </div>
     </header>
   );
