@@ -1,4 +1,4 @@
-import ProjectList from '../components/ProjectList';
+import ProjectList from '@/components/ProjectList';
 
 const projects = [
   {
@@ -21,6 +21,7 @@ export default function Home() {
       <p className="text-gray-600 mb-8">
         Account Manager turned web developer-in-training. Here are a few things I&apos;ve built.
       </p>
+      <h2 className="text-2xl font-bold mb-4">Projects</h2>
       <ProjectList projects={projects} />
     </div>
   );
