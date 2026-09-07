@@ -1,12 +1,27 @@
-export default function SchoolProjects() {
+import { Project } from '@/lib/projects-db';
+
+async function getSchoolProjects(): Promise<Project[]> {
+  const res = await fetch('http://localhost:3000/api/projects?type=school', {
+    cache: 'no-store',
+  });
+  return res.json();
+}
+
+export default async function SchoolProjects() {
+  const projects = await getSchoolProjects();
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
         School Projects
       </h2>
-      <p className="mt-2 text-gray-600 dark:text-gray-300">
-        A list of my WDD 430 course projects will go here.
-      </p>
+      <ul className="mt-4 space-y-2">
+        {projects.map((project) => (
+          <li key={project.id} className="text-gray-700 dark:text-gray-300">
+            <strong>{project.title}</strong>: {project.description}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
