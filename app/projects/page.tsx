@@ -1,14 +1,9 @@
-import { Project } from '@/lib/projects-db';
+import { getProjects, Project } from '@/lib/projects-db';
 
-async function getAllProjects(): Promise<Project[]> {
-  const res = await fetch('http://localhost:3000/api/projects', {
-    cache: 'no-store',
-  });
-  return res.json();
-}
+export const dynamic = 'force-dynamic';
 
 export default async function ProjectsOverview() {
-  const projects = await getAllProjects();
+  const projects: Project[] = await getProjects();
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">

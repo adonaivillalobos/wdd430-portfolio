@@ -1,14 +1,9 @@
-import { Project } from '@/lib/projects-db';
+import { getProjects, Project } from '@/lib/projects-db';
 
-async function getOpenSourceProjects(): Promise<Project[]> {
-  const res = await fetch('http://localhost:3000/api/projects?type=opensource', {
-    cache: 'no-store',
-  });
-  return res.json();
-}
+export const dynamic = 'force-dynamic';
 
 export default async function OpenSourceProjects() {
-  const projects = await getOpenSourceProjects();
+  const projects: Project[] = await getProjects('opensource');
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
