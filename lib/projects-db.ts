@@ -8,6 +8,7 @@ export interface Project {
   type: 'opensource' | 'school';
   technologies: string[];
   link?: string;
+  year_completed?: number | null;
 }
 
 const ITEMS_PER_PAGE = 6;
@@ -19,7 +20,11 @@ export async function getProjects(type?: string | null): Promise<Project[]> {
     `;
     return rows;
   }
-  const { rows } = await sql<Project>`SELECT * FROM projects ORDER BY id`;
+
+  const { rows } = await sql<Project>`
+    SELECT * FROM projects ORDER BY id
+  `;
+
   return rows;
 }
 
@@ -27,6 +32,7 @@ export async function getProjectById(id: number): Promise<Project | null> {
   const { rows } = await sql<Project>`
     SELECT * FROM projects WHERE id = ${id}
   `;
+
   return rows[0] ?? null;
 }
 
@@ -59,5 +65,6 @@ export async function fetchProjectsPages(query: string): Promise<number> {
   `;
 
   const count = Number(rows[0].count);
+
   return Math.ceil(count / ITEMS_PER_PAGE);
 }
