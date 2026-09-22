@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { auth } from '@clerk/nextjs/server';
 import { fetchFilteredProjects, fetchProjectsPages } from '@/lib/projects-db';
 import { deleteProject } from '@/lib/actions';
 import ProjectSearch from '@/app/ui/project-search';
@@ -14,6 +15,9 @@ export const dynamic = 'force-dynamic';
 export default async function ProjectsOverview(props: {
   searchParams?: Promise<{ query?: string; page?: string }>;
 }) {
+  const { userId } = await auth();
+  const isOwner = !!userId;
+
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
@@ -28,12 +32,14 @@ export default async function ProjectsOverview(props: {
           Projects Overview
         </h2>
 
-        <Link
-          href="/projects/create"
-          className="rounded-md bg-blue-600 px-5 py-3 text-white hover:bg-blue-700"
-        >
-          Create New Project
-        </Link>
+        {isOwner && (
+          <Link
+            href="/projects/create"
+            className="rounded-md bg-blue-600 px-5 py-3 text-white hover:bg-blue-700"
+          >
+            Create New Project
+          </Link>
+        )}
       </div>
 
       <div className="mt-4">
@@ -59,23 +65,25 @@ export default async function ProjectsOverview(props: {
               </h3>
             </div>
 
-            <div className="flex gap-3">
-              <Link
-                href={`/projects/${project.id}/edit`}
-                className="rounded-md bg-slate-600 px-5 py-3 text-white hover:bg-slate-700"
-              >
-                Edit
-              </Link>
-
-              <form action={deleteProject.bind(null, project.id)}>
-                <button
-                  type="submit"
-                  className="rounded-md bg-red-600 px-5 py-3 text-white hover:bg-red-700"
+            {isOwner && (
+              <div className="flex gap-3">
+                <Link
+                  href={`/projects/${project.id}/edit`}
+                  className="rounded-md bg-slate-600 px-5 py-3 text-white hover:bg-slate-700"
                 >
-                  Delete
-                </button>
-              </form>
-            </div>
+                  Edit
+                </Link>
+
+                <form action={deleteProject.bind(null, project.id)}>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-red-600 px-5 py-3 text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </div>
+            )}
           </li>
         ))}
       </ul>

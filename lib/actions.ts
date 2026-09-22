@@ -4,6 +4,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { auth } from '@clerk/nextjs/server';
 
 const currentYear = new Date().getFullYear();
 
@@ -50,6 +51,14 @@ export async function createProject(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  const { userId } = await auth();
+  if (!userId) {
+    return {
+      errors: {},
+      message: 'You must be signed in to create a project.',
+    };
+  }
+
   const validatedFields = CreateProjectSchema.safeParse({
     title: formData.get('title'),
     description: formData.get('description'),
@@ -116,6 +125,11 @@ export async function updateProject(
   id: string,
   formData: FormData
 ) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error('You must be signed in to update a project.');
+  }
+
   const raw = {
     title: formData.get('title'),
     description: formData.get('description'),
@@ -168,6 +182,11 @@ export async function updateProject(
 }
 
 export async function deleteProject(id: number) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error('You must be signed in to delete a project.');
+  }
+
   try {
     await sql`
       DELETE FROM projects

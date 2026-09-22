@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Show, SignInButton, UserButton } from '@clerk/nextjs';
 import NavLinks from './NavLinks';
 
 export default function Header() {
@@ -8,7 +9,22 @@ export default function Header() {
         <Link href="/" aria-label="Adonai Villalobos - Home" className="text-2xl font-bold">
           Adonai Villalobos
         </Link>
-        <NavLinks />
+
+        <div className="flex items-center gap-6">
+          <NavLinks />
+
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button className="rounded-md bg-white px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50">
+                Sign In
+              </button>
+            </SignInButton>
+          </Show>
+
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+        </div>
       </div>
     </header>
   );
