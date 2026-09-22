@@ -15,8 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Adonai Villalobos - Portfolio",
-  description: "My WDD 430 portfolio site",
+  title: {
+    default: "Adonai Villalobos | Project Portfolio",
+    template: "%s | Adonai Villalobos",
+  },
+  description:
+    "A portfolio of web development projects by Adonai Villalobos, built for WDD 430.",
+  metadataBase: new URL("https://wdd430-portfolio.vercel.app"),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

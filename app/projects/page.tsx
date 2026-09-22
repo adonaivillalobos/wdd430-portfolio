@@ -1,8 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { fetchFilteredProjects, fetchProjectsPages } from '@/lib/projects-db';
 import { deleteProject } from '@/lib/actions';
 import ProjectSearch from '@/app/ui/project-search';
 import Pagination from '@/app/ui/pagination';
+
+export const metadata: Metadata = {
+  title: 'Projects',
+};
 
 export const dynamic = 'force-dynamic';
 
@@ -47,7 +52,10 @@ export default async function ProjectsOverview(props: {
           >
             <div>
               <h3 className="text-lg font-medium">
-                {project.title} ({project.type})
+                <Link href={`/projects/${project.id}`} className="hover:underline">
+                  {project.title}
+                </Link>{' '}
+                ({project.type})
               </h3>
             </div>
 
